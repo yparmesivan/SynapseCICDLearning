@@ -1,26 +1,28 @@
 name: workspace deployment
 
 on:
-    push:
-        branches: [ publish_branch ]
+  push:
+    branches: [ publish_branch ]
+
 jobs:
-    release:
-        # You also can use the self-hosted runners.
-        runs-on: windows-latest
-        steps:
-        # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it.
-        - uses: actions/checkout@v2
-        - uses: azure/synapse-workspace-deployment@release-1.0
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy Synapse workspace
+        uses: azure/synapse-workspace-deployment@release-1.0
         with:
-          TargetWorkspaceName: 'target workspace name'
-          TemplateFile: './path of the TemplateForWorkspace.json'
-          ParametersFile: './path of the TemplateParametersForWorkspace.json'
-          OverrideArmParameters: './path of the parameters.yaml'
+          TargetWorkspaceName: 'testlh'
+          TemplateFile: './path/to/TemplateForWorkspace.json'
+          ParametersFile: './path/to/TemplateParametersForWorkspace.json'
+          OverrideArmParameters: './path/to/parameters.yaml'
           environment: 'Azure Public'
-          resourceGroup: 'target workspace resource group'
-          clientId: ${{secrets.CLIENTID}}
-          clientSecret:  ${{secrets.CLIENTSECRET}}
-          subscriptionId: 'subscriptionId of the target workspace'
+          resourceGroup: 'testing09'
+          clientId: ${{ secrets.CLIENTID }}
+          clientSecret: ${{ secrets.CLIENTSECRET }}
+          subscriptionId: 'e64e16eb-492c-4f71-8676-e1dd809a75d7'
           tenantId: 'tenantId'
           DeleteArtifactsNotInTemplate: 'true'
           managedIdentity: 'False'
