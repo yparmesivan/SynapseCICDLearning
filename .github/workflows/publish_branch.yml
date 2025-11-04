@@ -2,7 +2,7 @@ name: workspace deployment
 
 on:
   push:
-    branches: [ publish_branch ]
+    branches: [ publish_branch_latest ]
 
 jobs:
   release:
@@ -11,18 +11,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Deploy Synapse workspace
-        uses: azure/synapse-workspace-deployment@release-1.0
+      - name: Synapse workspace deployment
+        uses: Azure/Synapse-workspace-deployment@V1.9.1
         with:
-          TargetWorkspaceName: 'testlh'
-          TemplateFile: './path/to/TemplateForWorkspace.json'
-          ParametersFile: './path/to/TemplateParametersForWorkspace.json'
-          OverrideArmParameters: './path/to/parameters.yaml'
-          environment: 'Azure Public'
+          TargetWorkspaceName: 'yugafinal'
+          TemplateFile: './templates/TemplateForWorkspace.json'
+          ParametersFile: './templates/TemplateParametersForWorkspace.json'
+          OverrideArmParameters: './templates/parameters.yaml'
+          Environment: 'Azure Public'
           resourceGroup: 'testing09'
-          clientId: ${{ secrets.CLIENTID }}
-          clientSecret: ${{ secrets.CLIENTSECRET }}
+          clientId: ${{ secrets.CLIENT_ID }}
+          clientSecret: ${{ secrets.CLIENT_SECRET }}
           subscriptionId: 'e64e16eb-492c-4f71-8676-e1dd809a75d7'
-          tenantId: 'tenantId'
+          tenantId: '34bb8d5c-e585-4286-956a-390b4a25f067'
           DeleteArtifactsNotInTemplate: 'true'
-          managedIdentity: 'False'
+          managedIdentity: 'false'
+          deployManagedPrivateEndpoint: 'true'
+          FailOnMissingOverrides: 'false'
+          ArtifactsFolder: './artifacts'
+          operation: 'deploy'
+          npmpackage: ''
