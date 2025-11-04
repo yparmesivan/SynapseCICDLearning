@@ -1,0 +1,28 @@
+name: Synapse Workspace Deployment
+
+on:
+  push:
+    branches: [ main ]  # Change to your deployment branch
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v2
+
+      # Deploy Synapse workspace using ARM template
+      - uses: azure/synapse-workspace-deployment@release-1.0
+        with:
+          TargetWorkspaceName: 'testlh'  # Replace with your workspace name
+          TemplateFile: './templates/TemplateForWorkspace.json'  # Path to ARM template
+          ParametersFile: './templates/TemplateParametersForWorkspace.json'  # Path to parameters file
+          OverrideArmParameters: './templates/override.yaml'  # Optional override file
+          environment: 'Azure Public'
+          resourceGroup: 'testing09'  # Replace with your resource group
+          clientId: ${{ secrets.CLIENTID }}  # Stored in GitHub Secrets
+          clientSecret: ${{ secrets.CLIENTSECRET }}  # Stored in GitHub Secrets
+          subscriptionId: 'e64e16eb-492c-4f71-8676-e1dd809a75d7'  # Your subscription ID
+          tenantId: '16b3c013-d300-468d-ac64-7eda0820b6d3'  # Your tenant ID
+          DeleteArtifactsNotInTemplate: 'true'  # Cleans up artifacts not in template
+          managedIdentity: 'False'  # Set to True if using Managed Identity
